@@ -27,8 +27,10 @@
 
 // These objects are used inside the global ISR mainTimerISR, thus must be
 // global, too.
+System system;
 Segway segway;
 Timer mainTimer;
+Timer debugTimer;
 
 
 void mainTimerISR()
@@ -47,13 +49,28 @@ void mainTimerISR()
     segway.update();
 }
 
+void sendDebugISR()
+{
+    /*
+     * This ISR is periodically called by the debugTsimer. It causes the system
+     * class to transmit the latest debug values.
+     *
+     * Note: it is not possible to set a class method as ISR. Therefore this
+     *       "helper-function" is needed.
+     */
+
+	debugTimer.clearInterruptFlag();
+
+	// Transmit debug values
+	system.sendDebugFloats();
+}
+
 int main(void)
 {
-    System system;
-
     // Initialize objects according to the values in Config.h
     system.init(CFG_SYS_FREQ);
     mainTimer.init(&system, CFG_MAIN_TIMER_BASE, mainTimerISR, CFG_CTLR_UPDATE_FREQ);
+    debugTimer.init(&system, CFG_DEBUG_TIMER_BASE, sendDebugISR, CFG_DEBUG_TIMER_FREQ);
 
     // Initialize and start segway
     segway.init(&system);

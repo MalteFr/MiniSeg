@@ -22,10 +22,12 @@ enum ErrorCodes
 
     // Codes                // Error parameters
     UnknownError,           // None
-    BatteryLow,				// float batteryVoltage
+    BatteryLow,
     SysWrongFrequency,      // uint32_t clk
     GPIOWrongConfig,        // uint32_t portBase, uint32_t pin, uint32_t dir
     GPIOWrongCurrent,       // uint32_t current
+    ADCWrongConfig,
+    TimerWrongConfig,       // uint32_t base
     PWMWrongPins,           // uint32_t portBase, uint32_t pin1, uint32_t pin2
     PWMDutyOutOfRange,      // float duty
     MPUCommunicationError,  // None

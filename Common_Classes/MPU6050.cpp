@@ -1,8 +1,8 @@
 /*
  * MPU6050.cpp
  *
- *  Created on: 22.01.2019
- *      Author: Zuidberg
+ *    Author: Max Zuidberg
+ *     Email: m.zuidberg@icloud.com
  */
 
 #include "MPU6050.h"

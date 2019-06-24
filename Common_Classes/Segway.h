@@ -19,7 +19,6 @@
  * System.h:     Header file for the System class (needed for example for clock
  *               settings)
  * GPIO.h:       Header file for the GPIO class
- * Timer.h:      Header file for the Timer class
  * PWM.h:        Header file for the PWM class
  * ADC.h:        Header file for the ADC class
  * MPU6050.h:    Header file for the MPU6050 class
@@ -31,7 +30,6 @@
 #include "System.h"
 #include "Controller.h"
 #include "GPIO.h"
-#include "Timer.h"
 #include "PWM.h"
 #include "ADC.h"
 #include "MPU6050.h"

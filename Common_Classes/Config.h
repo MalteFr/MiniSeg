@@ -20,6 +20,9 @@
 // System
 #define CFG_SYS_FREQ                     40000000           // CPU clock
 
+#define CFG_DEBUG_TIMER_BASE             TIMER1_BASE
+#define CFG_DEBUG_TIMER_FREQ             10
+
 
 // Main timer
 #define CFG_MAIN_TIMER_BASE              TIMER0_BASE

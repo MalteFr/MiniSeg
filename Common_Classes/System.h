@@ -1,8 +1,8 @@
 /*
  * System.h
  *
- *  Created on: 29.10.2018
- *      Author: Zuidberg
+ *    Author: Max Zuidberg
+ *     Email: m.zuidberg@icloud.com
  */
 
 #ifndef SYSTEM_H_
@@ -18,6 +18,7 @@
  *                          device. This includes defines such as peripheral
  *                          base address locations such as GPIO_PORTF_BASE.
  * inc/hw_gpio.h:           Defines for the GPIO register offsets.
+ * driverlib/pin_map.h:     Mapping of peripherals to pins for all parts.
  * driverlib/sysctl.h:      Defines and macros for the System Control API of
  *                          DriverLib. This includes API functions such as
  *                          SysCtlClockSet.
@@ -28,6 +29,8 @@
  *                          routines.
  * driverlib/gpio.h:        Defines and macros for GPIO API of DriverLib. This
  *                          includes API functions such as GPIOPinWrite.
+ * uartstdio.h:             Utility driver to provide simple UART console
+ *                          functions.
  * ErrorCodes.h:            Enum with error codes for the error method.
  */
 #include <stdbool.h>
@@ -35,20 +38,15 @@
 #include "inc/hw_types.h"
 #include "inc/hw_memmap.h"
 #include "inc/hw_gpio.h"
+#include "driverlib/pin_map.h"
 #include "driverlib/sysctl.h"
 #include "driverlib/interrupt.h"
 #include "driverlib/fpu.h"
 #include "driverlib/gpio.h"
-#include "ErrorCodes.h"
-#include "inc/hw_memmap.h"
-#include "driverlib/pin_map.h"
-#include "driverlib/gpio.h"
-#include "driverlib/uart.h"
 #include "uartstdio.h"
-#include "inc/hw_gpio.h"
-#include "inc/hw_types.h"
-#include "Config.h"
+#include "ErrorCodes.h"
 
+#define SKIP_DBG_VAL -42424242
 
 class System
 {
@@ -56,21 +54,34 @@ public:
     System();
     virtual ~System();
     void init(uint32_t clk);
-    void error(ErrorCodes ErrorCode = UnknownError, void *faultOrigin0 = 0,
-                                                    void *faultOrigin1 = 0,
-                                                    void *faultOrigin2 = 0);
+    void error(ErrorCodes ErrorCode = UnknownError,
+               void *faultOrigin0 = 0,
+               void *faultOrigin1 = 0,
+               void *faultOrigin2 = 0);
     void enableFPU();
     uint32_t getClockFreq();
     uint32_t getPWMClockDiv();
     void delayCycles(uint32_t cycles);
     void delayUS(uint32_t us);
     void setDebugging(bool debug);
-    void sendDebugFloats(float f1 = 0, float f2 = 0, float f3 = 0,
-                         float f4 = 0, float f5 = 0, float f6 = 0);
+    void setDebugFloats(int32_t val1 = SKIP_DBG_VAL,
+                        int32_t val2 = SKIP_DBG_VAL,
+                        int32_t val3 = SKIP_DBG_VAL,
+                        int32_t val4 = SKIP_DBG_VAL,
+                        int32_t val5 = SKIP_DBG_VAL,
+                        int32_t val6 = SKIP_DBG_VAL);
+    void sendDebugFloats();
 
 private:
     bool systemDebuggingEnabled = true;
-    uint32_t systemClockFrequency = 0, systemPWMClockDiv = 0;
+    float systemDebugVal1 = 0;
+    float systemDebugVal2 = 0;
+    float systemDebugVal3 = 0;
+    float systemDebugVal4 = 0;
+    float systemDebugVal5 = 0;
+    float systemDebugVal6 = 0;
+    uint32_t systemClockFrequency = 0;
+    uint32_t systemPWMClockDiv = 0;
 
     // All peripherals of the uC
     const uint_fast8_t systemPeripheralsCount = 49;

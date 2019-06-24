@@ -7,10 +7,6 @@
  *     Email: m.zuidberg@icloud.com
  *
  * The segway class contains all the code needed drive a segway.
- * Please note that this segway is only imaginary and the code only provides
- * capabilities to teach the students some basic programming skills. All this
- * has to do with a segway is, that a gyroscope will read velocities and
- * translate them into motor torque on motors wired to a breadboard.
  */
 
 #include <Segway.h>
@@ -31,8 +27,8 @@ Segway::~Segway()
 
 void Segway::init(System *sys)
 {
-    /*  Initializes all the objects used in the segway class.
-     *  Needs to be called before any components can be used.
+    /* Initializes all the objects used in the segway class.
+     * Needs to be called before any components can be used.
      *
      * sys: Pointer to the current System instance. Needed to get CPU clock
      *      frequency.

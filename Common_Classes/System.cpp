@@ -1,8 +1,8 @@
 /*
  * System.cpp
  *
- *  Created on: 29.10.2018
- *      Author: Zuidberg
+ *    Author: Max Zuidberg
+ *     Email: m.zuidberg@icloud.com
  */
 
 #include <System.h>
@@ -104,10 +104,10 @@ void System::init(uint32_t clk)
 
     // Unlock both pins (Tiva Workshop page 70, datasheet page 656)
     HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
-    HWREG(GPIO_PORTF_BASE + GPIO_O_CR) |= GPIO_PIN_0;
+    HWREG(GPIO_PORTF_BASE + GPIO_O_CR)  |= GPIO_PIN_0;
     HWREG(GPIO_PORTF_BASE + GPIO_O_LOCK) = 0;
     HWREG(GPIO_PORTD_BASE + GPIO_O_LOCK) = GPIO_LOCK_KEY;
-    HWREG(GPIO_PORTD_BASE + GPIO_O_CR) |= GPIO_PIN_7;
+    HWREG(GPIO_PORTD_BASE + GPIO_O_CR)  |= GPIO_PIN_7;
     HWREG(GPIO_PORTD_BASE + GPIO_O_LOCK) = 0;
 
     // Enable interrupts
@@ -214,19 +214,74 @@ void System::delayUS(uint32_t us)
 
 void System::setDebugging(bool debug)
 {
+    /*
+     * Enable or disable the transmission of debugging data via UART.
+     * By default debugging is enabled.
+     */
     systemDebuggingEnabled = debug;
 }
 
-void System::sendDebugFloats(float f1, float f2, float f3, float f4, float f5, float f6)
+void System::setDebugFloats(int32_t val1, int32_t val2, int32_t val3, int32_t val4, int32_t val5, int32_t val6)
 {
     /*
-     * If debugging is enabled, send tab separated data to PC via UART
+     * Set up to 6 values to monitor via USB UART (Serial Monitor or Serial
+     * Plotter). Each value can be set without modifying the other values.
+     * Unused values will transmit as 0.
+     * Set the values you do not want to update to SKIP_DBG_VAL. In that case
+     * the last set value is preserved.
+     * Example:
+     *  You have to function that use debugging. Function foo watches 1 value,
+     *  function bar watches 2 values. Of course you do not want to overwrite
+     *  the values from foo inside bar and vice-versa.
+     *  Therefore you write inside foo:
+     *      fooSys.setDebugFloats(newValue1);
+     *  And inside bar:
+     *      barSys.setDebugFloats(SKIP_DBG_VAL, newValue2, newValue3);
+     * Because the default value of the 6 possible debug values is already
+     * SKIP_DBG_VAL you don't need to provide any additional values. Therefore
+     * you do not need the parameters 2 to 6 inside foo, respectively the
+     * parameters 4 to 6 inside bar.
      *
-     * float f: Up to 6 floats to send via UART. 
+     * val: Up to 6 signed integers that you want to monitor. Default value is
+     *      SKIP_DBG_VAL.
      */
 
-    if (systemDebuggingEnabled)
+    if (val1 != SKIP_DBG_VAL)
     {
-        UARTprintf("%3d\t%3d\t%3d\t%3d\t%3d\t%3d\n", (int32_t) f1, (int32_t) f2, (int32_t) f3, (int32_t) f4, (int32_t) f5, (int32_t) f6);
+    	systemDebugVal1 = val1;
     }
+    if (val2 != SKIP_DBG_VAL)
+    {
+		systemDebugVal2 = val2;
+	}
+    if (val3 != SKIP_DBG_VAL)
+    {
+		systemDebugVal3 = val3;
+	}
+    if (val4 != SKIP_DBG_VAL)
+    {
+		systemDebugVal4 = val4;
+	}
+    if (val5 != SKIP_DBG_VAL)
+    {
+		systemDebugVal5 = val5;
+	}
+    if (val6 != SKIP_DBG_VAL)
+    {
+		systemDebugVal6 = val6;
+	}
+}
+
+void System::sendDebugFloats()
+{
+	/*
+	 * If debugging is enabled, send data to PC via UART. Unused values default
+	 * to 0.
+	 * This method should be called periodically (f.ex. 100Hz Timer interrupt)
+	 */
+
+	if (systemDebuggingEnabled)
+	{
+		UARTprintf("%3d\t%3d\t%3d\t%3d\t%3d\t%3d\n", systemDebugVal1, systemDebugVal2, systemDebugVal3, systemDebugVal4, systemDebugVal5, systemDebugVal6);
+	}
 }

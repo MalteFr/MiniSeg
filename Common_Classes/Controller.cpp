@@ -115,7 +115,7 @@ void Controller::updateValuesRad(float steeringValue, float angleRateRad, float 
     ctlrLeftSpeed = ctlrTorque + ctlrDriveSpeed + steeringAdjusted;
     ctlrRightSpeed = ctlrTorque + ctlrDriveSpeed - steeringAdjusted;
 
-    ctlrSys->sendDebugFloats(ctlrAngleRad*1800/3.14159, steeringValue*100,
+    ctlrSys->setDebugFloats(ctlrAngleRad*1800/3.14159, steeringValue*100,
                              ctlrLeftSpeed*100, ctlrRightSpeed*100);
 }
 

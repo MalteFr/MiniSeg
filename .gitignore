@@ -31,10 +31,10 @@
 *.out
 *.app
 
-*.mk
-*.prefs
-*.opt
-*/Debug
-*/Release
+# CCS
+**/Debug/**
+**/Release/**
+**/.launches/**
+**/.settings/**
 
 vars.ini

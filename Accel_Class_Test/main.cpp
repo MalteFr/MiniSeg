@@ -1,8 +1,8 @@
 /*
  * main.cpp
  *
- *  Created on: 20.01.2019
- *      Author: Max Zuidberg
+ *    Author: Max Zuidberg
+ *     Email: m.zuidberg@icloud.com
  *
  *
  * Test program for the MPU6050. It simply reads the sensor values. These can
@@ -32,13 +32,11 @@ int main(void)
 {
     /*
      * See https://www.youtube.com/watch?v=-iGnh0_9YxE to find out how to
-     * check these values (line 78-83). 
+     * check these values (line 78-83).
      * Remember to check that the graphs are configured to float! Rearrange
      * the graphs as you like. You need to do this only once per debug session.
      * Use the button SW1 to start and stop sampling. During a stop the sensor
      * can be replaced by another one.
-	 * 
-	 * Alternative: Use a serial plotter like the one from the Arduino IDE. 
      */
 
     // Define all variables and objects
@@ -83,6 +81,7 @@ int main(void)
 	    while (sensorEnable.read())
 	    {
 	        angleRate = sensor.getAngleRate();
+	        angle += angleRate/10;
 	        hor = sensor.getAccelHor();
 	        ver = sensor.getAccelVer();
 	        system.sendDebugFloats(angleRate, 10*hor, 10*ver);
